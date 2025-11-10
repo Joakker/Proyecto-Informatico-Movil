@@ -27,6 +27,8 @@ import com.example.maestrochasquilla.ui.theme.MaestroChasquillaTheme
 import retrofit2.http.GET
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -34,8 +36,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MaestroChasquillaTheme {
-                    WorkerRequestsDisplayer()
-
+                    MaestroChasquillaApp()
                 }
             }
 
@@ -56,29 +57,4 @@ fun GreetingPreview() {
     MaestroChasquillaTheme {
         Greeting("Android")
     }
-}
-
-@Composable
-fun WorkerRequestsDisplayer() {
-    val viewModel: WorkerRequestViewModel = viewModel()
-    val advice = viewModel.workerRequest.value
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = advice,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.fetchWorkerRequests() }) {
-            Text("Refrescar solicitudes")
-        }
-    }
-
 }

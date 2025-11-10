@@ -21,8 +21,6 @@ class WorkerRequestViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstance.api.getWorkerRequests()
-
-                //And Remove the advice with _advice
                 workerRequest.value = response
             } catch (e: Exception) {
                 workerRequest.value = "Error: ${e.message}"
