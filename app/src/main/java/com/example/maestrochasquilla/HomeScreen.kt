@@ -1,14 +1,21 @@
 package com.example.maestrochasquilla
 
 import WorkerRequestViewModel
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -33,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 enum class MainScreen() {
     Start,
     SignUp,
+    Login,
     ClientRequests,
     WorkerRequests
 }
@@ -63,10 +71,39 @@ fun MaestroChasquillaApp(
         composable(MainScreen.ClientRequests.name){
             ClientRequestDisplayer(navController)
         }
+        composable(MainScreen.Login.name){
+            LoginDisplayer(navController)
+        }
     }
 }
 @Composable
 fun StartDisplayer(navController: NavController){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .padding(WindowInsets.statusBars.asPaddingValues())
+    ) {
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "Log in",
+                modifier = Modifier.clickable {
+                    navController.navigate("Login")
+                }
+            )
+            Text(
+                text = "Sign up",
+                modifier = Modifier.clickable {
+                    navController.navigate("SignUp")
+                }
+            )
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,6 +141,7 @@ fun StartDisplayer(navController: NavController){
         Button(onClick = { navController.navigate(MainScreen.WorkerRequests.name)}){
             Text("Encuentra uno aquí")
         }
+
     }
 }
 
@@ -131,6 +169,47 @@ fun WorkerRequestsDisplayer(navController: NavController) {
     }
 }
 
+
+@Composable
+fun LoginDisplayer(
+    navController: NavController,
+    viewModel: LoginViewModel = LoginViewModel()
+){
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") }
+        )
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Button(onClick = {
+            viewModel.login(
+                LoginRequest(
+                    email = email,
+                    password = password
+                )
+            ) {
+                navController.navigate("Start")
+            }
+        }) {
+            Text("Iniciar sesión")
+        }
+
+    }
+}
 @Composable
 fun SignUpDisplayer(
     navController: NavController,
