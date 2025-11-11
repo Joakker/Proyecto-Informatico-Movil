@@ -1,4 +1,3 @@
-import android.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -29,7 +28,7 @@ class WorkerRequestViewModel : ViewModel() {
     }
 }
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.1.95:8000/"
+    private const val BASE_URL = "http://192.168.0.7:8000/"
 
     val api: AdviceApiService by lazy {
         Retrofit.Builder()

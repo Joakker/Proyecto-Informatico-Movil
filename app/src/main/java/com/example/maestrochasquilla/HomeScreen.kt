@@ -10,10 +10,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -66,6 +72,7 @@ fun StartDisplayer(navController: NavController){
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
+
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -125,21 +132,87 @@ fun WorkerRequestsDisplayer(navController: NavController) {
 }
 
 @Composable
-fun SignUpDisplayer(navController: NavController) {
+fun SignUpDisplayer(
+    navController: NavController,
+    viewModel: SignupViewModel = viewModel()
+) {
+    var fname by remember { mutableStateOf("") }
+    var lname by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "HOLA ESTO ES PARA REGISTRARSE",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp)
+
+        TextField(
+            value = fname,
+            onValueChange = { fname = it },
+            label = { Text("First name") }
         )
+
+        TextField(
+            value = lname,
+            onValueChange = { lname = it },
+            label = { Text("Last name") }
+        )
+
+        TextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = { Text("Phone") }
+        )
+
+        TextField(
+            value = address,
+            onValueChange = { address = it },
+            label = { Text("Address") }
+        )
+
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") }
+        )
+
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            viewModel.signup(
+                SignupRequest(
+                    fname = fname,
+                    lname = lname,
+                    phone = phone,
+                    address = address,
+                    email = email,
+                    password = password
+                )
+            ) {
+                navController.navigate("Start")
+            }
+        }) {
+            Text("Registrarse")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(viewModel.message)
     }
 }
+
+
 
 @Composable
 fun ClientRequestDisplayer(navController: NavController) {
